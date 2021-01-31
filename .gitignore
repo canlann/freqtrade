@@ -1,10 +1,10 @@
 # Freqtrade rules
 *.sqlite
-!user_data/strategy/sample_strategy.py
-!user_data/notebooks
-user_data/notebooks/*
 freqtrade-plot.html
 freqtrade-profit-plot.html
+user_data/data/*
+user_data/backtest_results/*
+user_data/hyperopt_results/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
