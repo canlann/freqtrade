@@ -1,195 +1,139 @@
-# Freqtrade
+# Installation
+Use the "Quick Start" installation from Github
+https://github.com/freqtrade/freqtrade
 
-[![Freqtrade CI](https://github.com/freqtrade/freqtrade/workflows/Freqtrade%20CI/badge.svg)](https://github.com/freqtrade/freqtrade/actions/)
-[![Coverage Status](https://coveralls.io/repos/github/freqtrade/freqtrade/badge.svg?branch=develop&service=github)](https://coveralls.io/github/freqtrade/freqtrade?branch=develop)
-[![Documentation](https://readthedocs.org/projects/freqtrade/badge/)](https://www.freqtrade.io)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5737e6d668200b7518ff/maintainability)](https://codeclimate.com/github/freqtrade/freqtrade/maintainability)
+# Setup:
+https://www.freqtrade.io/
 
-Freqtrade is a free and open source crypto trading bot written in Python. It is designed to support all major exchanges and be controlled via Telegram. It contains backtesting, plotting and money management tools as well as strategy optimization by machine learning.
+# Strategies
+Are in "freqtrade/user_data/strategies" and can be searched on github e.g. <br>
+https://github.com/search?q=freqtrade+strategy&type=repositories <br>
+https://github.com/search?o=desc&q=freqtrade+strategy&s=committer-date&type=Commits
 
-![freqtrade](https://raw.githubusercontent.com/freqtrade/freqtrade/develop/docs/assets/freqtrade-screenshot.png)
+# Testrun
 
-## Disclaimer
+## Optional: Telegram Control Bot Fiverr
 
-This software is for educational purposes only. Do not risk money which
-you are afraid to lose. USE THE SOFTWARE AT YOUR OWN RISK. THE AUTHORS
-AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR TRADING RESULTS.
+botname: fiverr <br>
+username: <a href="https://t.me/fuenferbot">fuenferbot</a><br>
+apitoken: 1529808070:AAHpfYQV1FObixx1Gy7MXtaVEvQM2LmU51E <br>
+chat-id: 1569592805 <br>
 
-Always start by running a trading bot in Dry-run and do not engage money
-before you understand how it works and what profit/loss you should
-expect.
+        {
+            "update_id": 756134048,
+            "message": {
+                "message_id": 565839,
+                "from": {
+                    "id": 1569592805,
+                    "is_bot": false,
+                    "first_name": "Canlann",
+                    "username": "Canlann",
+                    "language_code": "de"
+                },
+                "chat": {
+                    "id": 1569592805,
+                    "first_name": "Canlann",
+                    "username": "Canlann",
+                    "type": "private"
+                },
+                "date": 1611485114,
+                "text": "/start",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 6,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        }
 
-We strongly recommend you to have coding and Python knowledge. Do not
-hesitate to read the source code and understand the mechanism of this bot.
+## Run it with
 
-## Exchange marketplaces supported
+        source .env/bin/activate
 
-- [X] [Bittrex](https://bittrex.com/)
-- [X] [Binance](https://www.binance.com/) ([*Note for binance users](docs/exchanges.md#blacklists))
-- [X] [Kraken](https://kraken.com/)
-- [ ] [113 others to tests](https://github.com/ccxt/ccxt/). _(We cannot guarantee they will work)_
+New (default) configuration can be created with 
 
-## Documentation
+        python3 ./freqtrade/main.py new-config
 
-We invite you to read the bot documentation to ensure you understand how the bot is working.
+Start trading with:
 
-Please find the complete documentation on our [website](https://www.freqtrade.io).
+        python3 ./freqtrade/main.py trade
 
-## Features
 
-- [x] **Based on Python 3.7+**: For botting on any operating system - Windows, macOS and Linux.
-- [x] **Persistence**: Persistence is achieved through sqlite.
-- [x] **Dry-run**: Run the bot without playing money.
-- [x] **Backtesting**: Run a simulation of your buy/sell strategy.
-- [x] **Strategy Optimization by machine learning**: Use machine learning to optimize your buy/sell strategy parameters with real exchange data.
-- [x] **Edge position sizing** Calculate your win rate, risk reward ratio, the best stoploss and adjust your position size before taking a position for each specific market. [Learn more](https://www.freqtrade.io/en/latest/edge/).
-- [x] **Whitelist crypto-currencies**: Select which crypto-currency you want to trade or use dynamic whitelists.
-- [x] **Blacklist crypto-currencies**: Select which crypto-currency you want to avoid.
-- [x] **Manageable via Telegram**: Manage the bot with Telegram.
-- [x] **Display profit/loss in fiat**: Display your profit/loss in 33 fiat.
-- [x] **Daily summary of profit/loss**: Provide a daily summary of your profit/loss.
-- [x] **Performance status report**: Provide a performance status of your current trades.
+# Working example: bittrex market
+This example can be used by using the config-usdt.json and coping it into the main folder, renaming it to config.json.
+When selecting currency pairs, you need to select a stake (e.g. USDT or BTC...). This stake has to be in every pair you select for trading. Each market has its own pairs.<br>
+Look for currency pairs on <a href="https://www.cryptometer.io/list/bittrex">Bittrex pairs</a><br>
+E.g.<br>
 
-## Quick start
+        "MKR/USDT",
+        "DFI/USDT",
+        "WICC/USDT",
+        "AAVE/USDT",
+        "LBC/USDT",
+        "XWC/USDT",
+        "ADA/USDT"
 
-Freqtrade provides a Linux/macOS script to install all dependencies and help you to configure the bot.
+I selected the pairs the following way: I filtered the Monthly %Change (top, right corner). Calculate:
 
-```bash
-git clone -b develop https://github.com/freqtrade/freqtrade.git 
-cd freqtrade
-./setup.sh --install
-```
+        avg = (highest_% + lowest_%) / 2
 
-For any other type of installation please refer to [Installation doc](https://www.freqtrade.io/en/latest/installation/).
+Then I selected the most common Bitcoin in this area. In this case it was USDT. This is my stake.
 
-## Basic Usage
+Create a configuration file for bittrex with USDT as stake currency: <br>
 
-### Bot commands
+        python3 ./freqtrade/main.py new-config
 
-```
-usage: freqtrade [-h] [-V]
-                 {trade,create-userdir,new-config,new-hyperopt,new-strategy,download-data,convert-data,convert-trade-data,backtesting,edge,hyperopt,hyperopt-list,hyperopt-show,list-exchanges,list-hyperopts,list-markets,list-pairs,list-strategies,list-timeframes,show-trades,test-pairlist,plot-dataframe,plot-profit}
-                 ...
+Insert the selected pairs into the "config.json" file: <br>
 
-Free, open source crypto trading bot
+        "pair_whitelist": [
+            "MKR/USDT",
+            "DFI/USDT",
+            "WICC/USDT",
+            "AAVE/USDT",
+            "LBC/USDT",
+            "XWC/USDT",
+            "ADA/USDT"
+        ],
 
-positional arguments:
-  {trade,create-userdir,new-config,new-hyperopt,new-strategy,download-data,convert-data,convert-trade-data,backtesting,edge,hyperopt,hyperopt-list,hyperopt-show,list-exchanges,list-hyperopts,list-markets,list-pairs,list-strategies,list-timeframes,show-trades,test-pairlist,plot-dataframe,plot-profit}
-    trade               Trade module.
-    create-userdir      Create user-data directory.
-    new-config          Create new config
-    new-hyperopt        Create new hyperopt
-    new-strategy        Create new strategy
-    download-data       Download backtesting data.
-    convert-data        Convert candle (OHLCV) data from one format to
-                        another.
-    convert-trade-data  Convert trade data from one format to another.
-    backtesting         Backtesting module.
-    edge                Edge module.
-    hyperopt            Hyperopt module.
-    hyperopt-list       List Hyperopt results
-    hyperopt-show       Show details of Hyperopt results
-    list-exchanges      Print available exchanges.
-    list-hyperopts      Print available hyperopt classes.
-    list-markets        Print markets on exchange.
-    list-pairs          Print pairs on exchange.
-    list-strategies     Print available strategies.
-    list-timeframes     Print available timeframes for the exchange.
-    show-trades         Show trades.
-    test-pairlist       Test your pairlist configuration.
-    plot-dataframe      Plot candles with indicators.
-    plot-profit         Generate plot showing profits.
+Download historical data from 01.01.2020 until now: <br>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -V, --version         show program's version number and exit
+        python3 ./freqtrade/main.py download-data --timerange 20200101-
 
-```
+Search for strategies you want to apply on github and copy them into user_data/strategies. <br>
 
-### Telegram RPC commands
+List and select strategies with: <br>
 
-Telegram is not mandatory. However, this is a great way to control your bot. More details and the full command list on our [documentation](https://www.freqtrade.io/en/latest/telegram-usage/)
+        python3 ./freqtrade/main.py list-strategies
 
-- `/start`: Starts the trader.
-- `/stop`: Stops the trader.
-- `/stopbuy`: Stop entering new trades.
-- `/status <trade_id>|[table]`: Lists all or specific open trades.
-- `/profit`: Lists cumulative profit from all finished trades
-- `/forcesell <trade_id>|all`: Instantly sells the given trade (Ignoring `minimum_roi`).
-- `/performance`: Show performance of each finished trade grouped by pair
-- `/balance`: Show account balance per currency.
-- `/daily <n>`: Shows profit or loss per day, over the last n days.
-- `/help`: Show help message.
-- `/version`: Show version.
+Backtest with the data and different strategies: <br>
 
-## Development branches
+        python3 ./freqtrade/main.py backtesting --timerange 20200101-20210124 --timeframe 1m --strategy-list Strategy001 Strategy002 --export trades
 
-The project is currently setup in two main branches:
+        
+Or with one strategy: <br>
 
-- `develop` - This branch has often new features, but might also contain breaking changes. We try hard to keep this branch as stable as possible.
-- `stable` - This branch contains the latest stable release. This branch is generally well tested.
-- `feat/*` - These are feature branches, which are being worked on heavily. Please don't use these unless you want to test a specific feature.
+        python3 ./freqtrade/main.py backtesting --timerange 20200101-20210124 --timeframe 1m -s Strategy001 --export trades
 
-## Support
+For help use: <br>
 
-### Help / Discord / Slack
+        python3 ./freqtrade/main.py backtesting -h
 
-For any questions not covered by the documentation or for further information about the bot, or to simply engage with like-minded individuals, we encourage you to join our slack channel.
+## Example backtesting with current setup
 
-Please check out our [discord server](https://discord.gg/MA9v74M).
+        python3 ./freqtrade/main.py backtesting --timerange 20200101-20210124 --timeframe 1m --strategy-list ADXMomentum ASDTSRockwellTrading AdxSmas AverageStrategy AwesomeMacd BbandRsi BinHV27 BinHV45 CCIStrategy CMCWinner ClucMay72018 CofiBitStrategy CombinedBinHAndCluc DoesNothingStrategy DoubleEMACrossoverWithTrend EMAPriceCrossoverWithTreshold EMASkipPump Freqtrade_backtest_validation_freqtrade1 InformativeSample Low_BB MACDCrossoverWithTrend MACDStrategy MACDStrategy_crossed Quickie RSIDirectionalWithTrend RSIDirectionalWithTrendSlow ReinforcedQuickie Scalp Simple SmoothOperator SmoothScalp Strategy001 Strategy002 Strategy003 Strategy004 Strategy005 TDSequentialStrategy strato --export trades
 
-You can also join our [Slack channel](https://join.slack.com/t/highfrequencybot/shared_invite/zt-l9d9iqgl-9cVBIeBkCBa8j6upSmd_NA).
 
-### [Bugs / Issues](https://github.com/freqtrade/freqtrade/issues?q=is%3Aissue)
 
-If you discover a bug in the bot, please
-[search our issue tracker](https://github.com/freqtrade/freqtrade/issues?q=is%3Aissue)
-first. If it hasn't been reported, please
-[create a new issue](https://github.com/freqtrade/freqtrade/issues/new) and
-ensure you follow the template guide so that our team can assist you as
-quickly as possible.
+## Rinse and repeat
+Don't forget to delete user_data/data before downloading new data
 
-### [Feature Requests](https://github.com/freqtrade/freqtrade/labels/enhancement)
+## Start the trading
+Take the best strategy and go: <br>
 
-Have you a great idea to improve the bot you want to share? Please,
-first search if this feature was not [already discussed](https://github.com/freqtrade/freqtrade/labels/enhancement).
-If it hasn't been requested, please
-[create a new request](https://github.com/freqtrade/freqtrade/issues/new)
-and ensure you follow the template guide so that it does not get lost
-in the bug reports.
+        python3 ./freqtrade/main.py trade -s Strategy
 
-### [Pull Requests](https://github.com/freqtrade/freqtrade/pulls)
-
-Feel like our bot is missing a feature? We welcome your pull requests!
-
-Please read our
-[Contributing document](https://github.com/freqtrade/freqtrade/blob/develop/CONTRIBUTING.md)
-to understand the requirements before sending your pull-requests.
-
-Coding is not a necessity to contribute - maybe start with improving our documentation?
-Issues labeled [good first issue](https://github.com/freqtrade/freqtrade/labels/good%20first%20issue) can be good first contributions, and will help get you familiar with the codebase.
-
-**Note** before starting any major new feature work, *please open an issue describing what you are planning to do* or talk to us on [discord](https://discord.gg/MA9v74M) or [Slack](https://join.slack.com/t/highfrequencybot/shared_invite/zt-k9o2v5ut-jX8Mc4CwNM8CDc2Dyg96YA). This will ensure that interested parties can give valuable feedback on the feature, and let others know that you are working on it.
-
-**Important:** Always create your PR against the `develop` branch, not `stable`.
-
-## Requirements
-
-### Up-to-date clock
-
-The clock must be accurate, synchronized to a NTP server very frequently to avoid problems with communication to the exchanges.
-
-### Min hardware required
-
-To run this bot we recommend you a cloud instance with a minimum of:
-
-- Minimal (advised) system requirements: 2GB RAM, 1GB disk space, 2vCPU
-
-### Software requirements
-
-- [Python 3.7.x](http://docs.python-guide.org/en/latest/starting/installation/)
-- [pip](https://pip.pypa.io/en/stable/installing/)
-- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [TA-Lib](https://mrjbq7.github.io/ta-lib/install.html)
-- [virtualenv](https://virtualenv.pypa.io/en/stable/installation.html) (Recommended)
-- [Docker](https://www.docker.com/products/docker) (Recommended)
+## For optimal trading speed get a vserver near bittrex market
+E.g. Bittrex.com is located near Chicago and/or San Fransisco<br>
+vServer near Chicago for better latency available from https://www.chicagovps.net/kvm-vps <br>
