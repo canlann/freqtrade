@@ -1,4 +1,16 @@
 # Installation
+Make sure python3.7 is install with: <br>
+
+        python --version
+
+Install the dependencies <br>
+        
+        # update repository
+        sudo apt-get update
+        
+        # install packages
+        sudo apt install -y python3-pip python3-venv python3-pandas git
+
 Use the "Quick Start" installation from Github
 https://github.com/freqtrade/freqtrade
 
